@@ -23,6 +23,5 @@ int main() {
             cout<<valor1<<" es menor que "<< valor2 <<endl;
         }
     }
-    cout<<"esotilin";
     return 0 ;
 }
