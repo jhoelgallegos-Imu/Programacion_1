@@ -5,11 +5,11 @@
 // Fecha creación: 21/08/2025
 // Número de ejercicio: 1
 #include <iostream>
-using namespace std;
+using namespace std; // esta parte ayuda a no repetir la sentencia std:: antes de cada "cout" o "cin" :D
 
 int main() {
-    cout << "Hola, soy estudiante de programacion" << endl;
-    cout << "Me llamo Jhoel Fernando Gallegos Mamani alias el galleta" << endl;
+    cout << "Hola, soy estudiante de programacion" << endl; 
+    cout << "Me llamo Jhoel Fernando Gallegos Mamani" << endl;
     cout << "Soy de Ingenieria en multimedia e interactividad" << endl;
     return 0;
 }
