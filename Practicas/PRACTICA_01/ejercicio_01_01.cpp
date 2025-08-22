@@ -3,7 +3,7 @@
 // Carnet: 10904518 L.P.
 // Carrera del estudiante: Ingeniería de Multimedia e Interactividad
 // Fecha creación: 21/08/2025
-// Número de ejercicio: 2
+// Número de ejercicio: 1
 #include <iostream>
 using namespace std;
 
