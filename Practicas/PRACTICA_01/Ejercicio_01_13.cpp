@@ -13,7 +13,10 @@ int main() {
     int nsum=0;
     cout<<"Ingrese un numero"<<endl;
     cin>>num;
-    nsum=(num*(num+1))/2;
-    cout<<"La suma de todos los numeros hasta "<<num<<" es "<<nsum<<endl;
+    for (size_t i = 0; i <= num; i++) //el for hace que se pueda repetir la secuencia y se sume consecutivamente
+    {
+        nsum=nsum+i;
+    }
+    cout<<"La suma de sus numeros es: "<<nsum;
     return 0;
 }
