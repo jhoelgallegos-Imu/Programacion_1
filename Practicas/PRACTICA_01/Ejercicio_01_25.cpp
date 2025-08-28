@@ -12,7 +12,7 @@ int main() {
     int num=0;
     int resultado=0;
     char respuesta='n';
-    do
+    do // Basicamente solo era mejorar el ejercicio 19 con un do while :D
     {
         cout<<"Ingrese el numero del que quiera la tabla de multiplicar:"<<endl;
         cin>>num;
