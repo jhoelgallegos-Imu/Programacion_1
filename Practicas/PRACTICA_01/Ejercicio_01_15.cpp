@@ -8,7 +8,7 @@
 #include <iostream>
 using namespace std;
 
-int main() {
+int main() {                    
     float PromNotas=0;
     float notas=0;
     int cantidad=0;
