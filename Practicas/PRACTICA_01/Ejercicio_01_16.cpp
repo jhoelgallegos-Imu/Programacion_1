@@ -21,7 +21,8 @@ int main() {
         return 0;
     }
 
-    while (i < num) {
+    while (i < num) 
+    {
         if (num % i == 0)  //Hace que oase por todos los numeros, si alguien entra entinces "primo" pasa a ser falso ya que significa que el numero es divisible por mas de si mismo y uno
         {   
             primo = false;
