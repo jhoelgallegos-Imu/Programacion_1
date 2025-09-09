@@ -14,23 +14,22 @@ int main() {
     int respuesta=0;
     int parametroF=50;
     int parametroI=0;
-    int intentos= 1;
     cout<<"Ingrese el numero que estoy pensando"<<endl;
-    do
+    for (int i = 1; i <=5; i++)
     {
-        cout<<"Intento "<<intentos<<endl;
+        cout<<"Intento "<<i<<endl;
         cout<<"El numero esta entre "<<parametroI<<" y "<<parametroF<<endl;
         cin>>respuesta;
         if (respuesta> num && parametroF>num) // esto ayuda a que adivinar no sea tan difivil
         {
-            parametroF-=5;
+            parametroF-=10;
         }
         else if (respuesta<num && parametroI<num)
         {
-            parametroI+=5;
+            parametroI+=10;
         }
-        intentos+=1;
-    } while (respuesta != num);
+    }
+    
     cout<<"Felicidades!!!!! adivinaste en el numero que estaba pensando :D";
     return 0;
 }
