@@ -16,6 +16,6 @@ int main () {
 }
 float CelciusAFahrenheit(float grado){
     float faren;
-    faren=(grado*9/5)+32;
+    faren=(grado*9/5)+32; //la formula para cambiar celcius a fahrenheit
     return faren;
 }

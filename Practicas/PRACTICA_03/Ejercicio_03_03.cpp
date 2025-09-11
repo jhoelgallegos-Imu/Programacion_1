@@ -26,7 +26,7 @@ int main () {
 
 int Capicua(int num) {
     int invertido=0;
-    while (num != 0) {
+    while (num != 0) { //con esta funcion se puede voltear facilmente el numero
         int digito = num % 10;
         invertido = invertido * 10 + digito;
         num /= 10;
