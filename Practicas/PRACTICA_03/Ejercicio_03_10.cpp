@@ -15,7 +15,7 @@ int main () {
     return 0;
 }
 
-double calcularTarifa(double kmR){
+double calcularTarifa(double kmR){ //la formula se aplica aqui
     int tarifa=0;
     tarifa= (kmR*2)+10;
     if (kmR>10)
