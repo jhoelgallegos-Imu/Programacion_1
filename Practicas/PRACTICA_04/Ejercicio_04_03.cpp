@@ -5,7 +5,7 @@
 #include <iostream>
 using namespace std;
 
-int ModificarValores(int& mod, int num );
+int ModificarValores(int& mod, int num ); //se establece la funcion antes del programa principal para asi evitar errores al buscar la misma
 int main () {
     int mod=0, n=0;
     cout<<"Ingrese el valor por referencia: "<<endl;

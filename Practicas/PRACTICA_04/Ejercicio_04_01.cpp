@@ -5,7 +5,7 @@
 #include <iostream>
 using namespace std;
 
-void intercambiodevalores(int& a, int& b);
+void intercambiodevalores(int& a, int& b); //es void ya que no regresa nada solo modifica los valores de a y b
 int main () {
     int a,b;
     cout<<"Ingrese el numero a"<<endl;
@@ -18,7 +18,7 @@ int main () {
     return 0;
 }
 
-void intercambiodevalores(int& a, int& b){
+void intercambiodevalores(int& a, int& b){ //es como cambiar los liquidos de 2 vasos, con un tercero se hace mas facil
     int cambio=0;
     cambio=a;
     a=b;

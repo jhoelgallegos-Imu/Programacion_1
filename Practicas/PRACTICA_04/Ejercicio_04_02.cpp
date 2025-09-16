@@ -5,7 +5,7 @@
 #include <iostream>
 using namespace std;
 
-const double pi = 3.1416;
+const double pi = 3.1416; // puse pi como una constante ya que siempre pi sera 3.1416... etc...
 double CalcularVolumen(double radio, double altura);
 int main () {
     double r, h=10;
@@ -23,7 +23,6 @@ int main () {
 
 double CalcularVolumen(double radio, double altura){
     double vol;
-    vol=pi*(radio*radio);
-    vol=vol*altura;
+    vol=pi*(radio*radio)*altura; //solo se usa la formula para calcular el volumen
     return vol;
 }

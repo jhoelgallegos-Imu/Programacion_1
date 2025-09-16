@@ -2,3 +2,9 @@
 // Autor: Jhoel Fernando Gallegos Mamani
 // Fecha creación: 15/09/2025
 // Número de ejercicio: 7
+#include <iostream>
+using namespace std;
+
+int main () {
+    return 0;
+}
