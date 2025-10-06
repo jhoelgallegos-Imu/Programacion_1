@@ -42,7 +42,7 @@ int main () {
     multiplicaciones(multiplicacion, cosa1, cosa2, n);
     for (int i = 0; i < n; i++)
     {
-        cout<<cosa1[i]<<" x "<<cosa2[i]<< " = "<< multiplicacion[i] <<endl;
+        cout<<cosa1[i]<<" x "<<cosa2[i]<< " = "<< multiplicacion[i] <<endl; // de esta forma para que se vea mejor el resultado :D
     }
     
     return 0;
