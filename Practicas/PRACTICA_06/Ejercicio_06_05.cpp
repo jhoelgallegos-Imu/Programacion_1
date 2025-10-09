@@ -1,6 +1,6 @@
 // Materia: Programación I, Paralelo 1
 // Autor: Jhoel Fernando Gallegos Mamani
-// Fecha creación: 7/10/2024
+// Fecha creación: 9/10/2024
 // Número de ejercicio: 5
 /* Problema planteado: Intersección de dos listas de clientes: dos empresas tienen listas de clientes y quieren
 saber cuántos clientes tienen en común. Escribe un programa que compare dos vectores
