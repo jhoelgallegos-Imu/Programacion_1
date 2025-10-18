@@ -57,6 +57,24 @@ int ColumnasLibres(vector<vector<char>> m, int f, int c ){ //escanea las columna
     return CL;
 }
 
+void Zombies(vector<vector<char>> m,vector<int>& ci, vector<int>& cj, int& zt, int f, int c){
+    for (int i = 0; i < f ; i++)
+    {
+        for (int j = 0; j < c ; j++)
+        {
+            if (m[i][j]=='x')
+            {
+                ci.push_back(i+1);
+                cj.push_back(j+1);
+                zt++;
+            }
+            
+        }
+        
+    }
+    
+}
+
 bool SePuedeEntrar(vector<vector<char>> m, int f, int c){ //escanea la 1 fila en busca de zombies
     int zombies=0;
     for (int i = 0; i < c ; i++)
@@ -79,7 +97,7 @@ int main(){
     vector<vector<char>> MapaDePrision(filas);
     vector<int> coordenadasI;
     vector<int> coordenadasJ;
-    cout<<"\t Mapa de la Prision: \t"<<endl;
+    cout<<"\t a) Mapa de la Prision: \t"<<endl;
     for (int i = 0; i < filas; i++) {
         for (int j = 0; j < columnas; j++) {
             int ZoL = GRandom(1, 10);
@@ -88,9 +106,6 @@ int main(){
             else
             {
                 MapaDePrision[i].push_back('x');
-                coordenadasI.push_back(i+1);
-                coordenadasJ.push_back(j+1);
-                ZombiesTotales++;
             }
         }
     }
@@ -103,6 +118,7 @@ int main(){
     cout<<"b) las filas sin zombies son: "<<FilasLibres(MapaDePrision, filas, columnas)
     <<" las columnas sin zombies son: "<<ColumnasLibres(MapaDePrision, filas, columnas)<<endl
     <<"c) Las coordenadas de los muertos vivientes son: "<<endl;
+    Zombies(MapaDePrision, coordenadasI, coordenadasJ, ZombiesTotales, filas, columnas);
     for (int i = 0; i < coordenadasI.size(); i++)
     {
         cout<<"zombie "<<i+1<<" esta en ("<<coordenadasI[i]<<","<<coordenadasJ[i]<<")"<<endl;

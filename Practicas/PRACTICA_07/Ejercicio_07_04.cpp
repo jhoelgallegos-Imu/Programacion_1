@@ -2,7 +2,7 @@
 // Autor: Jhoel Fernando Gallegos Mamani
 // Carnet: 10904518
 // Carrera del estudiante: Ingeniería de Multimedia e Interactividad
-// Fecha creación: 14/10/2025
+// Fecha creación: 18/10/2025
 // Número de ejercicio: 4
 
 #include <iostream>
