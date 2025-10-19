@@ -9,6 +9,33 @@
 #include <vector>
 using namespace std;
 
-int main(){
+vector<vector<int>> generarMatrizOrdenada(int n) {
+    vector<vector<int>> matriz(n, vector<int>(n));
+    int valor = 1;
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            matriz[i][j] = valor;
+            valor++; 
+        }
+    }
+    return matriz;
+}
+
+void mostrarMatriz(vector<vector<int>> matriz) {
+    for (int i = 0; i < matriz.size(); i++) {
+        for (int j = 0; j < matriz[i].size(); j++) {
+            cout << matriz[i][j] << "\t";
+        }
+        cout << endl;
+    }
+}
+
+int main() {
+    int n;
+    cout << "Ingrese el orden de la matriz (n): ";
+    cin >> n;
+    vector<vector<int>> matriz = generarMatrizOrdenada(n);
+    cout << "\n Matriz ordenada de " << n << "x" << n << ":\n";
+    mostrarMatriz(matriz);
     return 0;
 }
