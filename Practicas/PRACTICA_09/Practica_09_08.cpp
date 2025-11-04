@@ -17,7 +17,7 @@ struct Atleta {
     int medallas;
 };
 
-int random(int min, int max) { 
+int random(int min, int max) { //la clasica funcion para generar numeros randoms
     return rand() % (max - min + 1) + min;
 }
 
