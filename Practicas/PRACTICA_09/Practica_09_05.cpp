@@ -18,7 +18,7 @@ struct Pelicula
     string genero;
 };
 
-void MostrarPelicula(vector<Pelicula> & pelis, int nro){ 
+void MostrarPelicula(vector<Pelicula> & pelis, int nro){ //se hace mas facil mostrar las caracteristicas con un menu void
     cout<<"\t Titulo: "<<pelis[nro].titulo<<endl
         <<"\t Director: "<<pelis[nro].director<<" | Genero: "<<pelis[nro].genero<<endl
         <<"\t Duracion: "<<pelis[nro].minutos<<" | Anio de Estreno: "<<pelis[nro].anio_estreno<<endl;
