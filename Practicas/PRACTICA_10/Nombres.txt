@@ -1,0 +1,4 @@
+	Nombres Ingresados:
+	 Nombre 1: juan
+	 Nombre 2: pepe
+	 Nombre 3: juancho
