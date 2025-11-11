@@ -8,7 +8,7 @@
 #include <limits>
 using namespace std;
 
-void leerArchivo(const char nombreArchivo[30]) {
+void leerArchivo(const char nombreArchivo[30]) { //esta funcion lee el archivo, con el cout se puede diferenciar de cuando empieza y acaba
     ifstream archivo(nombreArchivo);
     char linea[30];
     cout << "\n=== Contenido del archivo ===\n\n";

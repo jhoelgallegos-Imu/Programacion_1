@@ -8,7 +8,7 @@
 #include <limits>
 using namespace std;
 
-void leerArchivo(const char nombreArchivo[30], int & contador) {
+void leerArchivo(const char nombreArchivo[30], int & contador) { //reeutilizo la funcion del anterior ejercicio
     ifstream archivo(nombreArchivo);
     char palabra[30];
     while (archivo >> palabra) {
@@ -18,7 +18,7 @@ void leerArchivo(const char nombreArchivo[30], int & contador) {
 }
 
 int main (){
-    char nombreArchivo[30] = "Nombres.txt";
+    char nombreArchivo[30] = "Nombres.txt"; //se reemplaza el archivo de aqui nomas para usar otro
     int contador=0;
     leerArchivo(nombreArchivo, contador);
     cout<<"El archivo tiene: "<<contador<<" palabras";

@@ -67,7 +67,7 @@ int main() {
         }
         system("pause");
         system("cls");
-    } while (opcion != 0);
+    } while (opcion != 0); //para que se pueda hacer veces indeterminadas, o ver el progreso del archivo
     cout << "Cerrando programa, hasta la proxima :)" << endl;
     return 0;
 }
