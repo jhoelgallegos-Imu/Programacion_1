@@ -1,0 +1,4 @@
+Nombre: pepe aguilar | Edad: 12 | Promedio: 45.35
+Nombre: Juancho el oso | Edad: 11 | Promedio: 92.65
+Nombre: pepe el mago | Edad: 17 | Promedio: 100
+Nombre: pepe | Edad: 55 | Promedio: 154.32
