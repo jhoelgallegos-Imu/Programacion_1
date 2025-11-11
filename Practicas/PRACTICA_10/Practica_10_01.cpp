@@ -5,7 +5,6 @@
 #include <iostream>
 #include <fstream>
 #include <cstdlib>
-#include <limits>
 using namespace std;
 
 void leerArchivo(const char nombreArchivo[30]) { //esta funcion lee el archivo, con el cout se puede diferenciar de cuando empieza y acaba

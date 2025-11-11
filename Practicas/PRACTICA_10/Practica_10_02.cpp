@@ -5,7 +5,6 @@
 #include <iostream>
 #include <fstream>
 #include <cstdlib>
-#include <limits>
 using namespace std;
 
 void leerArchivo(const char nombreArchivo[30], int & contador) { //reeutilizo la funcion del anterior ejercicio
