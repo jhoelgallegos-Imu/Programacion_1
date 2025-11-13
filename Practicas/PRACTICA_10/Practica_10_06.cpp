@@ -16,7 +16,7 @@ struct Ciudad {
 
 void LeerArchivo(vector<Ciudad> &lista, const char nombreArchivo[30]) {
     ifstream archivo(nombreArchivo);
-    if (!archivo) {
+    if (!archivo) {  //si el archivo no se puede abrir saltara este texto
         cout << "No se pudo abrir el archivo " << nombreArchivo << endl;
         return;
     }

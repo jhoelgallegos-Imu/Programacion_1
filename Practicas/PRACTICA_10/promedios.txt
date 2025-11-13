@@ -1,0 +1,5 @@
+Juan 7.875
+Ana 8.25
+Luis 6.25
+Pedro 8.75
+Maria 9.625
