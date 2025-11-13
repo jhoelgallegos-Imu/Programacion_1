@@ -1,0 +1,5 @@
+Madrid 32.5
+Sevilla 34.2
+Valencia 31
+Malaga 33.1
+Toledo 35

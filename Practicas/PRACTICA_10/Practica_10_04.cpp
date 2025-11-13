@@ -10,10 +10,6 @@ using namespace std;
 
 int Containador(const char nombreArchivo[30], const string &busqueda) {
     ifstream archivo(nombreArchivo);
-    if (!archivo.is_open()) {
-        cout << "Error: no se pudo abrir el archivo." << endl;
-        return 0;
-    }
     string linea;
     int contador = 0;
     while (getline(archivo, linea)) {

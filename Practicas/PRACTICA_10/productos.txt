@@ -1,0 +1,10 @@
+Manzana 3.22
+Banana 1.2
+Naranja 2
+Pera 2.3
+Durazno 3
+Uva 4.5
+Melon 5.2
+Sandia 6
+Fresa 3.8
+Kiwi 4.1
