@@ -1,5 +1,7 @@
 #include <iostream>
 #include <vector>
+#include <chrono>
+#include <thread>
 #include <cstdlib>
 using namespace std;
 
@@ -28,9 +30,25 @@ struct Compra
     Clientes persona;
 };
 
+void BarraDeCarga() {
+    const int total = 30;   
+    cout << "\nCargando...\n";
+    for (int i = 0; i <= total; i++) {
+        cout << "\r[";
+        for (int j = 0; j < i; j++)
+            cout << "#";
+        for (int j = i; j < total; j++)
+            cout << " ";
+        cout << "] " << (i * 100 / total) << "%";
+        cout.flush();
+        this_thread::sleep_for(chrono::milliseconds(80));
+    }
+    cout << "\n\n";
+}
 
 void CrearFactura(){
     vector <Compra> FacturaTemp;
+    float totalfinal = 0;
     int option , r, n=0;
     do
     {
@@ -51,6 +69,7 @@ void CrearFactura(){
                 temp.descuent0=true;
             }
             n++;
+            totalfinal+=temp.cantidad;
             FacturaTemp.push_back(temp);
         }
     } while (option!=2);
@@ -81,7 +100,28 @@ void CrearFactura(){
                 }
             }
         }
-        
+    do
+    {
+        if (option==1)
+        {
+            system("cls");
+            cout<<"==========MYNINTENDOSTORE=========="<<endl
+                <<"-----------------------------------"<<endl
+                <<"\t Tipo:\t|Cantidad: \t|Precio:"<<endl;
+            for (int  i = 0; i < n; i++)
+            {
+            cout<<"| "<<FacturaTemp[i].Tipo_precio<<"\t| "<<FacturaTemp[i].cantidad<<"\t|"<<FacturaTemp[i].Tipo_precio<<endl;
+            }
+            cout<<"                                 |Total="<<totalfinal*3.12<<endl;
+        }
+        cout<<"Quiere imprimir esta factura? 1)si 2)no R.-";
+        cin>>option;
+        cin.ignore();
+        if (option==1)
+        {
+            BarraDeCarga();
+        }
+    } while (option!=1);
 }
 
 void AdministrarPerfiles(){
@@ -100,6 +140,9 @@ int main () {
         cin>>option;
         switch (option)
         {
+        case 0:
+            cout<<"Cerrando programa, volviendo al menu principal :D"<<endl;
+            break;
         case 1:
             CrearFactura();
             break;
