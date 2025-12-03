@@ -41,7 +41,8 @@ void CrearFactura(){
         }
 }
 
-void TIENDA(){
+
+int main () {
     int option;
     do
     {
@@ -67,36 +68,5 @@ void TIENDA(){
         }
         system("pause");
     } while (option!=0);
-}
-
-int main () {
-    int option;
-    do
-    {
-        cout<<"============================================================"<<endl
-            <<"\t SISTEMA DE ADMINISTRACION DE MYNINTENDO "<<endl
-            <<"============================================================"<<endl
-            <<"1) TIENDA 2) VENTAS/STOCK 3) ADMINISTRACION 0) Salir ";
-        cin>>option;
-        switch (option)
-        {
-        case 0:
-            break;
-        case 1:
-            TIENDA();
-            break;
-        case 2:
-            cout<<"Opcion en desarrollo"<<endl;
-            break;
-        case 3:
-            cout<<"Opcion en desarrollo"<<endl;
-            break;
-        default:
-            cout<<"Opcion no valida, por favor seleciones otra ";
-        }
-        system("pause");
-        system("cls");
-    } while (option!=0);
-    cout<<"Cerando programa";
     return 0;
 }
