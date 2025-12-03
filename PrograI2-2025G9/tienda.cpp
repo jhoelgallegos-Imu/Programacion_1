@@ -2,6 +2,8 @@
 #include <vector>
 #include <chrono>
 #include <thread>
+#include <fstream>
+#include <cstring>
 #include <cstdlib>
 using namespace std;
 
@@ -11,7 +13,6 @@ struct Fecha
     int dia = 0;
     int anio = 0;
 };
-
 
 struct Clientes
 {
@@ -46,6 +47,19 @@ void BarraDeCarga() {
     cout << "\n\n";
 }
 
+void GuardarCliente(const Clientes &c)
+{
+    ofstream file("NintendoClients.bin", ios::binary | ios::app);
+    if (!file)
+    {
+        cout << "Error al abrir el archivo NintendoClients.bin\n";
+        return;
+    }
+    file.write(reinterpret_cast<const char*>(&c), sizeof(Clientes));
+    file.close();
+    cout << "\n Cliente guardado en NintendoClients.bin\n";
+}
+
 void CrearFactura(){
     vector <Compra> FacturaTemp;
     float totalfinal = 0;
@@ -75,7 +89,7 @@ void CrearFactura(){
     } while (option!=2);
         if (n>0)
         {
-                cout<<"----------------Desea introducir datos? 1)Si 2) No  R: ";
+            cout<<"----------------Desea introducir datos? 1)Si 2) No  R: ";
             cin>>option;
             cin.ignore();
             if (option==1)
@@ -93,6 +107,7 @@ void CrearFactura(){
                 {
                     DatosPersonales.membresia= true;
                 }
+                GuardarCliente(DatosPersonales);
                 for (int i = 0; i < n; i++)
                 {
                     FacturaTemp[i].persona = DatosPersonales ;  
@@ -107,25 +122,108 @@ void CrearFactura(){
             system("cls");
             cout<<"==========MYNINTENDOSTORE=========="<<endl
                 <<"-----------------------------------"<<endl
-                <<"\t Tipo:\t|Cantidad: \t|Precio:"<<endl;
+                <<"| Tipo:\t\t|Cantidad: \t|Precio:"<<endl;
             for (int  i = 0; i < n; i++)
             {
-            cout<<"| "<<FacturaTemp[i].Tipo_precio<<"\t| "<<FacturaTemp[i].cantidad<<"\t|"<<FacturaTemp[i].Tipo_precio<<endl;
+            cout<<"| "<<FacturaTemp[i].Tipo_precio<<"\t\t| "<<FacturaTemp[i].cantidad<<"\t\t|"<<FacturaTemp[i].Tipo_precio<<endl;
             }
-            cout<<"                                 |Total="<<totalfinal*3.12<<endl;
+            cout<<"                                     |Total="<<totalfinal*3.12<<endl;
         }
-        cout<<"Quiere imprimir esta factura? 1)si 2)no R.-";
+        cout<<"-----------------------------------"<<endl
+            <<"Quiere imprimir esta factura? 1)si 2)no R.-";
         cin>>option;
         cin.ignore();
         if (option==1)
         {
             BarraDeCarga();
         }
+        else if (option==2)
+        {
+            break;
+        }
+        
     } while (option!=1);
 }
 
-void AdministrarPerfiles(){
-
+void Perfiles(){
+    int option;
+    do
+    {
+        cout<<"----------------Seleccione la opcion que quiera ejecutar "<<endl
+            <<"\t1) Ver perfiles 2) Ver miembros 3)Modificar perfiles 0)salir";
+        cin>>option;
+        cin.ignore();
+        switch(option) {
+            case 1: {
+                ifstream file("NintendoClients.bin", ios::binary);
+                if (!file) { cout << "No se pudo abrir NintendoClients.bin\n"; break; }
+                Clientes c;
+                int contador = 1;
+                cout << "\n=== LISTA DE CLIENTES ===\n";
+                while(file.read(reinterpret_cast<char*>(&c), sizeof(Clientes))) {
+                    cout << contador++ << ") CI: " << c.CarnetIdentidad<< "| Nombre: " << c.Nombre<< "\t| Apellido: " << c.Apellido<< "\t| Membresia: " << (c.membresia ? "Si" : "No")<< "\t| Puntos: " << c.PuntosNintendo << endl;
+                }
+                file.close();
+                cout << "=========================\n";
+                break;
+            }
+            case 2: { 
+                ifstream file("NintendoClients.bin", ios::binary);
+                if (!file) { cout << "No se pudo abrir NintendoClients.bin\n"; break; }
+                Clientes c;
+                int contador = 1;
+                cout << "\n=== LISTA DE MIEMBROS ===\n";
+                while(file.read(reinterpret_cast<char*>(&c), sizeof(Clientes))) {
+                    if(c.membresia) {
+                        cout << contador++ << 
+                        ") CI: " << c.CarnetIdentidad<< "\t| Nombre: " << c.Nombre<< "\t| Apellido: " << c.Apellido << "\t| Puntos: " << c.PuntosNintendo << endl;
+                    }
+                }
+                file.close();
+                cout << "=========================\n";
+                break;
+            }
+            case 3: {
+                char ci[10];
+                cout << "Ingrese CI del cliente a modificar: ";
+                cin >> ci;
+                fstream file("NintendoClients.bin", ios::binary | ios::in | ios::out);
+                if (!file) { cout << "No se pudo abrir NintendoClients.bin\n"; break; }
+                Clientes c;
+                bool encontrado = false;
+                streampos pos;
+                while(file.read(reinterpret_cast<char*>(&c), sizeof(Clientes))) {
+                    if(strcmp(c.CarnetIdentidad, ci) == 0) {
+                        encontrado = true;
+                        pos = file.tellg();
+                        break;
+                    }
+                }
+                if(!encontrado) { cout << "Cliente no encontrado\n"; file.close(); break; }
+                file.seekp(pos - static_cast<streamoff>(sizeof(Clientes)));
+                int r;
+                cout << "Ingrese nuevo Nombre: "; 
+                cin >> c.Nombre;
+                cout << "Ingrese nuevo Apellido: "; 
+                cin >> c.Apellido;
+                cout << "Tiene membresia? 1=Si 2=No: ";  
+                cin >> r;
+                c.membresia = (r == 1);
+                cout << "Puntos Nintendo: "; cin >> c.PuntosNintendo;
+                file.write(reinterpret_cast<char*>(&c), sizeof(Clientes));
+                cout << "Cliente actualizado correctamente!\n";
+                file.close();
+                break;
+            }
+            case 0:
+                cout << "Saliendo del menu de perfiles..."<<endl;
+                break;
+            default:
+                cout << "Opcion no valida, intente de nuevo."<<endl;
+        }
+        system("pause");
+        system("cls");
+    } while (option!=0);
 }
 
 int main () {
@@ -136,7 +234,7 @@ int main () {
         cout<<"------------------------------------------------------------"<<endl
             <<"\t SISTEMA DE ADMINISTRACION DE TIENDA "<<endl
             <<"------------------------------------------------------------"<<endl
-            <<"1) Crear Factura 2) Administrar perfil 0) Salir ";
+            <<"1) Crear Factura 2) Perfiles de Clientes 0) Salir ";
         cin>>option;
         switch (option)
         {
@@ -147,7 +245,7 @@ int main () {
             CrearFactura();
             break;
         case 2:
-            AdministrarPerfiles();
+            Perfiles();
             break;
         case 3:
             cout<<"Opcion en desarrollo"<<endl;
