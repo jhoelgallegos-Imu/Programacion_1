@@ -252,11 +252,9 @@ void Perfiles(){
             GuardarCliente(DatosPersonales);
             break;
         }
-
         case 0:
             cout << "Saliendo del menu de perfiles...\n";
             break;
-
         default:
             cout << "Opcion no valida\n";
         }
