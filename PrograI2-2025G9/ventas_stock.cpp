@@ -48,21 +48,25 @@ void Ventas(){
     int option;
     do
     {
-        cout<<"----------------Facturacion: Annadir Producto? 1) Si 2) No : R.-";
+        system("cls");
+        cout<<" ------------------------------- PRODUCTOS OPCIONES ------------------------------- "<<endl
+        <<"1) Productos vendidos 2) Agregar al Inventario 3) Modificar inventario 4) eliminar del inventario 0)Salir | R: ";
         cin>>option;
         cin.ignore();
-        if (option==1)
+        switch (option)
         {
-            cout<<"productoaniadido"<<endl;
+        case 0:
+            cout<<"cerrando pestania... ";
+            break;
+        case 1:
+            cout<<"cerrando pestania... ";
+            break;
+        default:
+            cout<<"Opcion no valida, vuelva a intentarlo por favor ;-; "<<endl;
+            break;
         }
-    } while (option!=2);
-        cout<<"Desea introducir datos? 1)Si 2) No "<<endl<<" R: ";
-        cin>>option;
-        cin.ignore();
-        if (option==1)
-        {
-            
-        }
+    } while (option!=0);
+    
 }
 
 void productos(){
