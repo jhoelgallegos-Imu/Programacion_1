@@ -1,100 +1,36 @@
-#include <iostream>
-#include <cstdlib>
+#include "Clientes.h"
+#include "Administracion.h"
+#include "Ventas.h"
+#include "estructuras.h"
 using namespace std;
 
-struct Clientes
-{
-    char CarnetIdentidad[10] = "00000000" ;
-    char Nombre[30] ;
-    char Apellido[30];
-    bool membresia = false;
-    int PuntosNintendo = 0;
-};
-
-struct Compra
-{
-    char CarnetIdentidad[10] = "00000000";
-    int Tipo_precio;
-    int cantidad;
-    bool descuent0 = false;
-};
-
-
-void CrearFactura(){
-    int option;
-    do
-    {
-        cout<<"----------------Facturacion: Annadir Producto? 1) Si 2) No : R.-";
-        cin>>option;
-        cin.ignore();
-        if (option==1)
-        {
-            cout<<"productoaniadido"<<endl;
-        }
-    } while (option!=2);
-        cout<<"Desea introducir datos? 1)Si 2) No "<<endl<<" R: ";
-        cin>>option;
-        cin.ignore();
-        if (option==1)
-        {
-            
-        }
-}
-
-void TIENDA(){
-    int option;
-    do
-    {
-        system("cls");
-        cout<<"------------------------------------------------------------"<<endl
-            <<"\t SISTEMA DE ADMINISTRACION DE TIENDA "<<endl
-            <<"------------------------------------------------------------"<<endl
-            <<"1) Crear Factura 2) Administrar perfil 0) Salir ";
-        cin>>option;
-        switch (option)
-        {
-        case 1:
-            CrearFactura();
-            break;
-        case 2:
-            cout<<"Opcion en desarrollo"<<endl;
-            break;
-        case 3:
-            cout<<"Opcion en desarrollo"<<endl;
-            break;
-        default:
-            cout<<"Opcion no valida, por favor seleciones otra ";
-        }
-        system("pause");
-    } while (option!=0);
-}
-
 int main () {
+    system("cls");
     int option;
     do
     {
         cout<<"============================================================"<<endl
             <<"\t SISTEMA DE ADMINISTRACION DE MYNINTENDO "<<endl
             <<"============================================================"<<endl
-            <<"1) TIENDA 2) VENTAS/STOCK 3) ADMINISTRACION 0) Salir ";
+            <<"1) TIENDA 2) VENTAS/STOCK 3) ADMINISTRACION 0) Salir | R: ";
         cin>>option;
         switch (option)
         {
         case 0:
             break;
         case 1:
-            TIENDA();
+            IniciarTienda();
             break;
         case 2:
-            cout<<"Opcion en desarrollo"<<endl;
+            IniciarInventarioTienda();
             break;
         case 3:
-            cout<<"Opcion en desarrollo"<<endl;
+            IniciarClientes();
             break;
         default:
             cout<<"Opcion no valida, por favor seleciones otra ";
+            system("pause");
         }
-        system("pause");
         system("cls");
     } while (option!=0);
     cout<<"Cerando programa";
