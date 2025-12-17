@@ -1,8 +1,16 @@
 #include <iostream>
 #include <cstdlib>
+#include <vector>
 #include <fstream>
 #include <cstring>
 using namespace std;
+
+struct fecha
+{
+    int dia = 18;
+    int mes = 7;
+    int anio = 2006;
+};
 
 struct Clientes
 {
@@ -20,6 +28,7 @@ struct Compra
     int cantidad;
     bool descuent0 = false;
     Clientes persona;
+    fecha diadecompra;
 };
 
 struct Objeto
@@ -29,6 +38,11 @@ struct Objeto
     float precio;
     char nombre[51];
     bool existe = true;
+};
+
+struct ProductoVendido {
+    int codigo;
+    int cantidadVendida;
 };
 
 void GuardarObjeto(const Objeto &c)
@@ -44,13 +58,35 @@ void GuardarObjeto(const Objeto &c)
     cout << "\n Objeto guardado en Inventario.bin\n";
 }
 
+void BuscarenInventario(int code) {
+    fstream file("Inventario.bin", ios::in | ios::binary);
+    if (!file) {
+        cout << "No se pudo abrir Inventario.bin " << endl;
+        return;  
+    }
+    Objeto o;
+    bool encontrado = false;
+    while (file.read(reinterpret_cast<char*>(&o), sizeof(Objeto))) {
+        if (o.codigo == code) { 
+            cout << " Producto: " << o.nombre << " Codigo: " << o.codigo << " Precio: " << o.precio ;
+            encontrado = true;
+            break;  
+        }
+    }
+    if (!encontrado) {
+        cout << "Producto con codigo " << code << " no encontrado." << endl;
+    }
+    file.close();  
+}
+
 void Ventas(){
     int option;
     do
     {
         system("cls");
-        cout<<" ------------------------------- PRODUCTOS OPCIONES ------------------------------- "<<endl
-        <<"1) Productos vendidos 2) Agregar al Inventario 3) Modificar inventario 4) eliminar del inventario 0)Salir | R: ";
+        cout<<" ------------------------------- VENTAS OPCIONES ------------------------------- "<<endl
+        <<" 1) Productos vendidos 2) Producto Mas vendido 3) Producto menos vendido"<<endl
+        <<" 0)Salir | R: ";
         cin>>option;
         cin.ignore();
         switch (option)
@@ -59,14 +95,96 @@ void Ventas(){
             cout<<"cerrando pestania... ";
             break;
         case 1:
-            cout<<"cerrando pestania... ";
+            {
+                ifstream file("Ventas.bin", ios::binary);
+                if (!file) {
+                    cout << "No se pudo abrir el archivo de ventas.\n";
+                    return;
+                }
+                Compra c;
+                int contador = 1;
+                cout << "\n\t\t=== VENTAS ===\n";
+                while (file.read(reinterpret_cast<char*>(&c), sizeof(Compra))) {
+                    if (c.Tipo_precio <= 0 || c.cantidad <= 0) {
+                        cout << "Producto con codigo " << c.Tipo_precio << " tiene un codigo o cantidad inválido.\n";
+                        continue; 
+                    }
+                    int codigos = c.Tipo_precio;
+                    cout << "----------------------------------------------------------------------------------------------------" << endl
+                        << contador++ << ") "; 
+                    BuscarenInventario(codigos); 
+                    cout << " Cantidad: " << c.cantidad 
+                        << " Fecha: " << c.diadecompra.dia << "/" << c.diadecompra.mes << "/" << c.diadecompra.anio << endl;
+                    cout << "Datos Nombre: " << c.persona.Nombre << " " << c.persona.Apellido
+                        << " CI: " << c.persona.CarnetIdentidad << " Membresia: " << c.persona.membresia << endl;
+                }
+                file.close();
+                break;
+            }
+        case 3: {
+            fstream file("Ventas.bin", ios::in | ios::binary);
+            if (!file) {
+                cout << "No se pudo abrir ventas.bin" << endl;
+                return;
+            }
+            vector<ProductoVendido> ventasTotales;  
+            Compra c;
+            while (file.read(reinterpret_cast<char*>(&c), sizeof(Compra))) {
+                bool encontrado = false;
+                for (auto& venta : ventasTotales) {
+                    if (venta.codigo == c.Tipo_precio) {
+                        venta.cantidadVendida += c.cantidad;  
+                        encontrado = true;
+                        break;
+                    }
+                }
+                if (!encontrado) {
+                    ventasTotales.push_back({c.Tipo_precio, c.cantidad});
+                }
+            }
+            file.close();
+            int minVentas = INT_MAX;
+            int codigoMenosVendido = -1;
+            for (const auto& venta : ventasTotales) {
+                if (venta.cantidadVendida < minVentas) {
+                    minVentas = venta.cantidadVendida;
+                    codigoMenosVendido = venta.codigo;
+                }
+            }
+            if (codigoMenosVendido == -1) {
+                cout << "No se encontraron ventas en el archivo." << endl;
+                return;
+            }
+            file.open("Inventario.bin", ios::in | ios::binary);
+            if (!file) {
+                cout << "No se pudo abrir Inventario.bin" << endl;
+                return;
+            }
+            Objeto o;
+            bool encontrado = false;
+            while (file.read(reinterpret_cast<char*>(&o), sizeof(Objeto))) {
+                if (o.codigo == codigoMenosVendido) {
+                    cout << "El objeto menos vendido es: " << endl;
+                    cout << "Nombre: " << o.nombre << endl;
+                    cout << "Codigo: " << o.codigo << endl;
+                    cout << "Cantidad vendida: " << minVentas << endl;
+                    cout << "Precio: " << o.precio << endl;
+                    encontrado = true;
+                    break;
+                }
+            }
+            file.close();
+            if (!encontrado) {
+                cout << "No se encontro el producto menos vendido en el inventario." << endl;
+            }
             break;
+        }
         default:
             cout<<"Opcion no valida, vuelva a intentarlo por favor ;-; "<<endl;
             break;
         }
+        system("pause");
     } while (option!=0);
-    
 }
 
 void productos(){
@@ -75,7 +193,8 @@ void productos(){
     {
         system("cls");
         cout<<" ------------------------------- PRODUCTOS OPCIONES ------------------------------- "<<endl
-        <<"1) Ver Inventario 2) Agregar al Inventario 3) Modificar inventario 4) eliminar del inventario 0)Salir | R: ";
+        <<"1) Ver Inventario 2) Agregar al Inventario 3) Modificar inventario 4) eliminar del inventario"<<endl
+        <<"5) Actualizar inventario 0)Salir | R: ";
         cin>>option;
         cin.ignore();
         switch (option)
@@ -201,6 +320,44 @@ void productos(){
             cout << "Producto eliminado correctamente! D:"<<endl;
             break;
         }
+        case 5: {
+             { 
+            fstream file("Inventario.bin", ios::in | ios::out | ios::binary);
+            if (!file) 
+            { 
+                cout << "No se pudo abrir Inventario.bin\n"; 
+                break; 
+            }
+            Objeto c;
+            int contador = 1, r, agregar;
+            cout << "\n=== INVENTARIO ===\n";
+            while(file.read(reinterpret_cast<char*>(&c), sizeof(Objeto))) {
+                if(c.existe) {  
+                    cout << contador++ << ") Nombre: " << c.nombre
+                         << "    \t | Precio: " << c.precio
+                         << "    \t | Cantidad: " << c.cantidad
+                         << "    \t | Codigo: " << c.codigo << endl;
+                    cout<<"Desea agregar cantidad de existencias? 1) si 2) no / R: ";
+                    cin>>r;
+                    if (r==1)
+                    {
+                        cout<<"Cuantas existencias desea agregar al producto? R: ";
+                        cin>>agregar;
+                        if (agregar > 0) {  
+                        c.cantidad += agregar;
+                        file.seekp(-static_cast<int>(sizeof(Objeto)), ios::cur); 
+                        file.write(reinterpret_cast<char*>(&c), sizeof(Objeto));  
+                        cout << "Cantidad de existencias actualizada a: " << c.cantidad << endl;
+                        } 
+                        else {
+                            cout << "Cantidad no válida.\n";
+                        }
+                    }
+                }
+            }
+            file.close();
+            }
+        }
         default:
             cout<<"Opcion no valida, vuelva a intentarlo por favor ;-; "<<endl;
             break;
@@ -221,6 +378,9 @@ int main () {
         cin>>option;
         switch (option)
         {
+        case 0:
+            cout<<"Cerrando programa, volviendo al menu principal :D"<<endl;
+            break;
         case 1:
             Ventas();
             break;

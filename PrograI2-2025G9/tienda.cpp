@@ -7,6 +7,13 @@
 #include <cstdlib>
 using namespace std;
 
+struct fecha
+{
+    int dia = 18;
+    int mes = 7;
+    int anio = 2006;
+};
+
 struct Clientes
 {
     char CarnetIdentidad[10] = "00000000" ;
@@ -23,6 +30,16 @@ struct Compra
     int cantidad;
     bool descuent0 = false;
     Clientes persona;
+    fecha diadecompra;
+};
+
+struct Objeto
+{
+    int codigo;
+    int cantidad;
+    float precio;
+    char nombre[51];
+    bool existe = true;
 };
 
 void BarraDeCarga() {
@@ -52,6 +69,16 @@ void GuardarCliente(const Clientes &c)
     file.write(reinterpret_cast<const char*>(&c), sizeof(Clientes));
     file.close();
     cout << "\n Cliente guardado en NintendoClients.bin\n";
+}
+
+void GuardarVenta(const Compra& c) {
+    fstream file("Ventas.bin", ios::app | ios::binary);
+    if (!file) {
+        cout << "No se pudo abrir el archivo Ventas.bin" << endl;
+        return;
+    }
+    file.write(reinterpret_cast<const char*>(&c), sizeof(Compra));
+    file.close();
 }
 
 void CrearFactura(){
@@ -90,8 +117,7 @@ void CrearFactura(){
                 {
                 Clientes DatosPersonales;
                 cout << "Ingrese CI: ";
-                cin.ignore();
-                cin >> DatosPersonales.CarnetIdentidad;
+                cin.getline(DatosPersonales.CarnetIdentidad , 10);
                 cout << "Ingrese Nombre: ";
                 cin.getline(DatosPersonales.Nombre , 31);
                 cout << "Ingrese Apellido: ";
@@ -109,41 +135,56 @@ void CrearFactura(){
             }
         }
     do
-    {
-            system("cls");
-            cout<<"==========MYNINTENDOSTORE=========="<<endl
-                <<"-----------------------------------"<<endl
-                <<"| Tipo:\t\t|Cantidad: \t|Precio:"<<endl;
-            for (int  i = 0; i < n; i++)
-            {
-            cout<<"| "<<FacturaTemp[i].Tipo_precio<<"\t\t| "<<FacturaTemp[i].cantidad<<"\t\t|"<<FacturaTemp[i].Tipo_precio<<endl;
-            }
-            cout<<"-----------------------------------"<<endl
-            <<"|N: "<<FacturaTemp[0].persona.Nombre<<"\t|A: "<<FacturaTemp[0].persona.Apellido<<"\t|CI: "<<FacturaTemp[0].persona.CarnetIdentidad<<" "<<endl
-            <<"-----------------------------------"<<endl;
-            cout<<"                                   |Total="<<totalfinal*3.12<<endl;
-            cout<<"-----------------------------------"<<endl
-            <<"Quiere imprimir esta factura? 1)si 2)no R.-";
-        cin>>option;
-        cin.ignore();
-        if (option==1)
-        {
-            BarraDeCarga();
-        }
-        else if (option==2)
-        {
+{
+    system("cls");
+    cout << "==========MYNINTENDOSTORE==========" << endl
+         << "-----------------------------------" << endl
+         << "| Tipo:\t\t  |Cantidad:\t  |Precio:" << endl;
+    float totalFactura = 0; 
+    for (int i = 0; i < n; i++) {
+        int tipoProducto = FacturaTemp[i].Tipo_precio; 
+        ifstream file("Inventario.bin", ios::binary);
+        if (!file) {
+            cout << "No se pudo abrir Inventario.bin" << endl;
             break;
         }
-        
-    } while (option!=1);
+        Objeto o;
+        bool encontrado = false;
+        while (file.read(reinterpret_cast<char*>(&o), sizeof(Objeto))) {
+            if (o.codigo == tipoProducto && o.existe) {
+                cout << "| " << o.nombre << "\t\t| " << FacturaTemp[i].cantidad << "\t\t| " << o.precio << endl;
+                totalFactura += FacturaTemp[i].cantidad * o.precio;
+                encontrado = true;
+                break;
+            }
+        }
+        if (!encontrado) {
+            cout << "Producto con código " << tipoProducto << " no encontrado en Inventario.\n";
+        }
+        file.close();
+    }
+    cout << "-----------------------------------" << endl
+         << "Nombre: " << FacturaTemp[0].persona.Nombre << " " << FacturaTemp[0].persona.Apellido
+         << " CI: " << FacturaTemp[0].persona.CarnetIdentidad << endl
+         << "                                   |Total: " << totalFactura << endl;
+    cout << "-----------------------------------" << endl;
+    cout << " Quiere imprimir esta factura? 1) sí 2) no R.-";
+    cin >> option;
+    cin.ignore();
+    if (option == 1) {
+        BarraDeCarga();
+    }
+    for (int i = 0; i < n; i++) {
+        GuardarVenta(FacturaTemp[i]);
+    }
+} while (option != 1);
 }
 
 void Perfiles(){
     int option;
     do {
         cout<<"----------------Seleccione la opcion que quiera ejecutar "<<endl
-            <<"1) Ver perfiles 2) Ver miembros 3)Modificar perfiles 4) Eliminar perfiles"<<endl
-            <<"5) Restaurar perfiles 6) Crear perfil 0)salir";
+            <<"1) Ver perfiles 2) Ver miembros 3)Modificar perfiles 0)salir";
         cin>>option;
         cin.ignore();
         switch(option) {
@@ -210,46 +251,6 @@ void Perfiles(){
             file.write(reinterpret_cast<char*>(&c), sizeof(Clientes));
             file.close();
             cout << "Cliente actualizado correctamente!\n";
-            break;
-        }
-        case 4: {
-            char ci[10];
-            cout << "Ingrese CI del cliente a eliminar: ";
-            cin >> ci;
-            fstream file("NintendoClients.bin", ios::binary | ios::in | ios::out);
-            if (!file) { cout << "No se pudo abrir NintendoClients.bin\n"; break; }
-            Clientes c;
-            streampos pos;
-            bool encontrado = false;
-            while(file.read(reinterpret_cast<char*>(&c), sizeof(Clientes))) {
-                if(c.existe && strcmp(c.CarnetIdentidad, ci) == 0) { 
-                    pos = file.tellg();
-                    encontrado = true;
-                    break;
-                }
-            }
-            if(!encontrado) { cout<<"Cliente no encontrado\n"; file.close(); break; }
-            c.existe = false;
-            file.seekp(pos - static_cast<streamoff>(sizeof(Clientes)));
-            file.write(reinterpret_cast<char*>(&c), sizeof(Clientes));
-            file.close();
-            cout << "Cliente eliminado correctamente!\n";
-            break;
-        }
-        case 6: { 
-            int r;
-            Clientes DatosPersonales;
-            cout << "Ingrese CI: ";
-            cin.getline(DatosPersonales.CarnetIdentidad , 11);
-            cout << "Ingrese Nombre: ";
-            cin.getline(DatosPersonales.Nombre , 31);
-            cout << "Ingrese Apellido: ";
-            cin.getline(DatosPersonales.Apellido , 31);
-            cout << "Tiene membresia? 1)Si 2)No: ";
-            cin >> r;
-            DatosPersonales.membresia = (r == 1);
-            DatosPersonales.existe = true;
-            GuardarCliente(DatosPersonales);
             break;
         }
         case 0:
