@@ -97,114 +97,117 @@ void CrearFactura(){
     vector <Compra> FacturaTemp;
     float totalfinal = 0;
     int option , r, n=0;
-    VerInventario();
-    do
+    cout<<"Seguro que quiere comenzar con la operacion? 1) Si 2) No "<<endl;
+    cin>>option;
+    cin.ignore(); 
+    if (option == 1)
     {
-        cout<<"----------------Facturacion: Annadir Producto? 1) Si 2) No : R.-";
-        cin>>option;
-        cin.ignore();
-        if (option==1)
+        do
         {
-            Compra temp;
-            cout<<"---------------------Ingrese el codigo del producto: ";
-            cin>>temp.Tipo_precio;
-            cout<<"---------------------Ingrese la cantidad: ";
-            cin>>temp.cantidad;
-            cout<<"---------------------Tiene descuento?: 1) si 2) no R.-";
-            cin>>r;
-            if (r==1)
+            VerInventario();
+            cout<<"----------------Facturacion: Annadir Producto? 1) Si 2) No : R.-";
+            cin>>option;
+            cin.ignore();
+            if (option==1)
             {
-                temp.descuent0=true;
+                Compra temp;
+                cout<<"---------------------Ingrese el codigo del producto: ";
+                cin>>temp.Tipo_precio;
+                cout<<"---------------------Ingrese la cantidad: ";
+                cin>>temp.cantidad;
+                cout<<"---------------------Tiene descuento?: 1) si 2) no R.-";
+                cin>>r;
+                if (r==1)
+                {
+                    temp.descuent0=true;
+                }
+                n++;
+                totalfinal+=temp.cantidad;
+                FacturaTemp.push_back(temp);
             }
-            n++;
-            totalfinal+=temp.cantidad;
-            FacturaTemp.push_back(temp);
-        }
-    } while (option!=2);
-        if (n>0)
-        {
-                cout<<"----------------Desea introducir datos? 1)Si 2) No  R: ";
-                cin>>option;
-                cin.ignore();
-                if (option==1)
-                {
-                Clientes DatosPersonales;
-                cout << "Ingrese CI: ";
-                cin.getline(DatosPersonales.CarnetIdentidad , 10);
-                cout << "Ingrese Nombre: ";
-                cin.getline(DatosPersonales.Nombre , 31);
-                cout << "Ingrese Apellido: ";
-                cin.getline(DatosPersonales.Apellido , 31);
-                cout << "Tiene membresia? 1)Si 2)No: ";
-                cin >> r;
-                DatosPersonales.membresia = (r == 1);
-                DatosPersonales.existe = true;
-                GuardarCliente(DatosPersonales);
-                for (int i = 0; i < n; i++)
-                {
-                    FacturaTemp[i].persona = DatosPersonales ;  
-                    FacturaTemp[i].persona.PuntosNintendo=n;
+        } while (option!=2);
+            if (n>0)
+            {
+                    cout<<"----------------Desea introducir datos? 1)Si 2) No  R: ";
+                    cin>>option;
+                    cin.ignore();
+                    if (option==1)
+                    {
+                    Clientes DatosPersonales;
+                    cout << "Ingrese CI: ";
+                    cin.getline(DatosPersonales.CarnetIdentidad , 10);
+                    cout << "Ingrese Nombre: ";
+                    cin.getline(DatosPersonales.Nombre , 31);
+                    cout << "Ingrese Apellido: ";
+                    cin.getline(DatosPersonales.Apellido , 31);
+                    cout << "Tiene membresia? 1)Si 2)No: ";
+                    cin >> r;
+                    DatosPersonales.membresia = (r == 1);
+                    DatosPersonales.existe = true;
+                    GuardarCliente(DatosPersonales);
+                    for (int i = 0; i < n; i++)
+                    {
+                        FacturaTemp[i].persona = DatosPersonales ;  
+                        FacturaTemp[i].persona.PuntosNintendo=n;
+                    }
                 }
             }
-        }
-    do
-{
-    system("cls");
-    ofstream archivo("FacturaTemporal.txt");
-    cout << "\n=== Contenido del archivo ===\n\n";
-    archivo<< "==========MYNINTENDOSTORE==========" << endl
-         << "-----------------------------------" << endl
-         << "| Tipo:\t\t  |Cantidad:\t  |Precio:" << endl;
-    cout << "==========MYNINTENDOSTORE==========" << endl
-         << "-----------------------------------" << endl
-         << "| Tipo:\t\t  |Cantidad:\t  |Precio:" << endl;
-    float totalFactura = 0; 
-    for (int i = 0; i < n; i++) {
-        int tipoProducto = FacturaTemp[i].Tipo_precio; 
-        ifstream file("Inventario.bin", ios::binary);
-        if (!file) {
-            cout << "No se pudo abrir Inventario.bin" << endl;
-            break;
-        }
-        Objeto o;
-        bool encontrado = false;
-        while (file.read(reinterpret_cast<char*>(&o), sizeof(Objeto))) {
-            if (o.codigo == tipoProducto && o.existe) {
-                archivo << "| " << o.nombre << "\t\t| " << FacturaTemp[i].cantidad << "\t\t| " << o.precio << endl;
-                totalFactura += FacturaTemp[i].cantidad * o.precio;
-                cout << "| " << o.nombre << "\t\t| " << FacturaTemp[i].cantidad << "\t\t| " << o.precio << endl;
-                totalFactura += FacturaTemp[i].cantidad * o.precio;
-                RestarCantidadInventario(tipoProducto, FacturaTemp[i].cantidad);
-                encontrado = true;
+        system("cls");
+        ofstream archivo("FacturaTemporal.txt");
+        cout << "\n=== Contenido del archivo ===\n\n";
+        archivo<< "==========MYNINTENDOSTORE==========" << endl
+            << "-----------------------------------" << endl
+            << "| Tipo:\t\t  |Cantidad:\t  |Precio:" << endl;
+        cout << "==========MYNINTENDOSTORE==========" << endl
+            << "-----------------------------------" << endl
+            << "| Tipo:\t\t  |Cantidad:\t  |Precio:" << endl;
+        float totalFactura = 0; 
+        for (int i = 0; i < n; i++) {
+            int tipoProducto = FacturaTemp[i].Tipo_precio; 
+            ifstream file("Inventario.bin", ios::binary);
+            if (!file) {
+                cout << "No se pudo abrir Inventario.bin" << endl;
                 break;
             }
+            Objeto o;
+            bool encontrado = false;
+            while (file.read(reinterpret_cast<char*>(&o), sizeof(Objeto))) {
+                if (o.codigo == tipoProducto && o.existe) {
+                    archivo << "| " << o.nombre << "\t\t| " << FacturaTemp[i].cantidad << "\t\t| " << o.precio << endl;
+                    totalFactura += FacturaTemp[i].cantidad * o.precio;
+                    cout << "| " << o.nombre << "\t\t| " << FacturaTemp[i].cantidad << "\t\t| " << o.precio << endl;
+                    totalFactura += FacturaTemp[i].cantidad * o.precio;
+                    RestarCantidadInventario(tipoProducto, FacturaTemp[i].cantidad);
+                    encontrado = true;
+                    break;
+                }
+            }
+            if (!encontrado) {
+                cout << "Producto con codigo " << tipoProducto << " no encontrado en Inventario.\n";
+            }
+            file.close();
         }
-        if (!encontrado) {
-            cout << "Producto con codigo " << tipoProducto << " no encontrado en Inventario.\n";
+        archivo << "-----------------------------------" << endl
+            << "Nombre: " << FacturaTemp[0].persona.Nombre << " " << FacturaTemp[0].persona.Apellido
+            << " CI: " << FacturaTemp[0].persona.CarnetIdentidad << endl
+            << "                                   |Total: " << totalFactura << endl;
+        archivo << "-----------------------------------" << endl;
+        cout << "-----------------------------------" << endl
+            << "Nombre: " << FacturaTemp[0].persona.Nombre << " " << FacturaTemp[0].persona.Apellido
+            << " CI: " << FacturaTemp[0].persona.CarnetIdentidad << endl
+            << "                                   |Total: " << totalFactura << endl;
+        cout << "-----------------------------------" << endl;
+        cout << " Imprimiendo factura :D ";
+        if (option == 1) {
+            BarraDeCarga();
         }
-        file.close();
+        for (int i = 0; i < n; i++) {
+            GuardarVenta(FacturaTemp[i]);
+        }
+        archivo.close();
     }
-    archivo << "-----------------------------------" << endl
-         << "Nombre: " << FacturaTemp[0].persona.Nombre << " " << FacturaTemp[0].persona.Apellido
-         << " CI: " << FacturaTemp[0].persona.CarnetIdentidad << endl
-         << "                                   |Total: " << totalFactura << endl;
-    archivo << "-----------------------------------" << endl;
-    cout << "-----------------------------------" << endl
-         << "Nombre: " << FacturaTemp[0].persona.Nombre << " " << FacturaTemp[0].persona.Apellido
-         << " CI: " << FacturaTemp[0].persona.CarnetIdentidad << endl
-         << "                                   |Total: " << totalFactura << endl;
-    cout << "-----------------------------------" << endl;
-    cout << " Quiere imprimir esta factura? 1) si 2) no R.-";
-    cin >> option;
-    cin.ignore();
-    if (option == 1) {
-        BarraDeCarga();
-    }
-    for (int i = 0; i < n; i++) {
-        GuardarVenta(FacturaTemp[i]);
-    }
-    archivo.close();
-} while (option != 1);
+    
+
 }
 
 void Perfiles(){
@@ -305,20 +308,19 @@ int IniciarTienda () {
         {
         case 0:
             cout<<"Cerrando programa, volviendo al menu principal :D"<<endl;
+            system("pause");
             break;
         case 1:
             CrearFactura();
+            system("pause");
             break;
         case 2:
             Perfiles();
             break;
-        case 3:
-            cout<<"Opcion en desarrollo"<<endl;
-            break;
         default:
             cout<<"Opcion no valida, por favor seleciones otra ";
+            system("pause");
         }
-        system("pause");
     } while (option!=0);
     return 0;
 }
