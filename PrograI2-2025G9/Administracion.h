@@ -8,6 +8,23 @@
 #include "estructuras.h"
 using namespace std;
 
+void VerInventario(){
+    ifstream file("Inventario.bin", ios::binary);
+    if (!file) { cout << "No se pudo abrir Inventario.bin\n";  
+    }
+    Objeto c;
+    int contador = 1;
+    cout << "\n=== INVENTARIO ===\n";
+    while(file.read(reinterpret_cast<char*>(&c), sizeof(Objeto))) {
+        if(c.existe) {  
+            cout << contador++ << ") Nombre: " << c.nombre
+                 << "    \t | Precio: " << c.precio
+                 << "    \t | Cantidad: " << c.cantidad
+                 << "    \t | Codigo: " << c.codigo << endl;
+        }
+    }
+}
+
 void BarraDeCarga() {
     const int total = 30;   
     cout << "\nCargando...\n";
@@ -53,7 +70,6 @@ void RestarCantidadInventario(int codigoProducto, int cantidadComprada) {
                 pos = file.tellg();
                 file.seekp(pos - static_cast<streamoff>(sizeof(Objeto))); 
                 file.write(reinterpret_cast<char*>(&o), sizeof(Objeto));
-                cout << "Cantidad actualizada para el producto: " << o.nombre << endl;
             } else {
                 cout << "No hay suficiente stock de este producto.\n";
             }
@@ -81,6 +97,7 @@ void CrearFactura(){
     vector <Compra> FacturaTemp;
     float totalfinal = 0;
     int option , r, n=0;
+    VerInventario();
     do
     {
         cout<<"----------------Facturacion: Annadir Producto? 1) Si 2) No : R.-";
@@ -133,6 +150,11 @@ void CrearFactura(){
     do
 {
     system("cls");
+    ofstream archivo("FacturaTemporal.txt");
+    cout << "\n=== Contenido del archivo ===\n\n";
+    archivo<< "==========MYNINTENDOSTORE==========" << endl
+         << "-----------------------------------" << endl
+         << "| Tipo:\t\t  |Cantidad:\t  |Precio:" << endl;
     cout << "==========MYNINTENDOSTORE==========" << endl
          << "-----------------------------------" << endl
          << "| Tipo:\t\t  |Cantidad:\t  |Precio:" << endl;
@@ -148,6 +170,8 @@ void CrearFactura(){
         bool encontrado = false;
         while (file.read(reinterpret_cast<char*>(&o), sizeof(Objeto))) {
             if (o.codigo == tipoProducto && o.existe) {
+                archivo << "| " << o.nombre << "\t\t| " << FacturaTemp[i].cantidad << "\t\t| " << o.precio << endl;
+                totalFactura += FacturaTemp[i].cantidad * o.precio;
                 cout << "| " << o.nombre << "\t\t| " << FacturaTemp[i].cantidad << "\t\t| " << o.precio << endl;
                 totalFactura += FacturaTemp[i].cantidad * o.precio;
                 RestarCantidadInventario(tipoProducto, FacturaTemp[i].cantidad);
@@ -160,6 +184,11 @@ void CrearFactura(){
         }
         file.close();
     }
+    archivo << "-----------------------------------" << endl
+         << "Nombre: " << FacturaTemp[0].persona.Nombre << " " << FacturaTemp[0].persona.Apellido
+         << " CI: " << FacturaTemp[0].persona.CarnetIdentidad << endl
+         << "                                   |Total: " << totalFactura << endl;
+    archivo << "-----------------------------------" << endl;
     cout << "-----------------------------------" << endl
          << "Nombre: " << FacturaTemp[0].persona.Nombre << " " << FacturaTemp[0].persona.Apellido
          << " CI: " << FacturaTemp[0].persona.CarnetIdentidad << endl
@@ -174,6 +203,7 @@ void CrearFactura(){
     for (int i = 0; i < n; i++) {
         GuardarVenta(FacturaTemp[i]);
     }
+    archivo.close();
 } while (option != 1);
 }
 
